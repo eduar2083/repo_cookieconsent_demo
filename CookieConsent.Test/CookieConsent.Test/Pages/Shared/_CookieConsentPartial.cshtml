@@ -1,0 +1,20 @@
+﻿@using Microsoft.AspNetCore.Http.Features
+
+@{
+    var ConsentFeatureFlag = Context.Features.Get<ITrackingConsentFeature>();
+    var ShowBannerFlag = !ConsentFeatureFlag?.CanTrack ?? false;
+    var CookieStr = ConsentFeatureFlag?.CreateConsentCookie();
+}
+
+@if (ShowBannerFlag)
+{
+    <div id="cookieConsentdiv">
+        <h3 class="display-6">Tu privacidad</h3>
+        <p>Al hacer clic en "Aceptar todas las cookies", acepta que UNACEM pueda almacenar cookies en su dispositivo y divulgar información de acuerdo con nuestra "
+            <a asp-page="/Privacy">POLÍTICA DE COOKIES</a>.
+        </p>
+        <form method="post">
+            <button class="btn btn-success" id="accept-cookies" asp-page-handler="SetConsent">Aceptar todas las cookies</button>
+        </form>
+    </div>
+}  
